@@ -1,0 +1,17 @@
+- Node does compile to machine code using google's V8 javascript compiler
+    - this is done transparently, so there is no "compile" step.  it behaves like an interpreted language
+
+- Node is built with backend databases in mind, but is especially built for working with JSON and NoSQL databases
+
+- The Javascript stack:
+    - Node is the platform that runs as a web server
+    - Express is the web app framework 
+    - templating engines allow you to combine code and markup
+    - The database is typically a NoSQL document store like MongoDB
+    - The clientside framework is something like angular or dojo
+    
+- in old web servers like apache, the web server just knows where a static file is and serves it on
+    a request
+    - a web app layer like Spring is what allows for complicated dispatching, data, etc.
+    - with node the app is the web server - they aren't different
+    
