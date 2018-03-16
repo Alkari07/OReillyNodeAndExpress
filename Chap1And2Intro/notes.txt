@@ -15,3 +15,7 @@
     - a web app layer like Spring is what allows for complicated dispatching, data, etc.
     - with node the app is the web server - they aren't different
     
+- Fundamental philosophy behind node is event driven programming, only instead of an event from a GUI
+    you are responding to events from the server
+
+- Routing: the mechanism by which a client is served the content it asked for
