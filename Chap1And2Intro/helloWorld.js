@@ -19,7 +19,7 @@ function serveStaticFile(res, path, contentType, responseCode) {
             });
             res.end(data);
         }
-    })
+    });
 }
 
 http.createServer(function(req, res) {
