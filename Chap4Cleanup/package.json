@@ -1,0 +1,16 @@
+{
+  "name": "chap3expressscaffolding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "meadowlark.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rsantos",
+  "license": "ISC"
+}
