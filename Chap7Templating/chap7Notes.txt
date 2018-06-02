@@ -1,0 +1,12 @@
+{{! Handlebars comments look like this}}
+<!--They won't be visible if the client inspects the html, unlike this comment-->
+
+if you need to access the parent context object, use ../
+    for example, in a foreach loop of book in books, if you needed to access the object which owns books
+    inside the loop you would need ../ in handlebars
+
+- layouts work well if your view fits within a single element of the layout overall
+    - but what happens if view needs to inject into multiple different parts of the layout?
+    - for example, adding something to both the body and head element
+    - or, to insert a script that uses jquery (which is usually the last thing loaded)
+    - you can use the concept of sections to make this work
