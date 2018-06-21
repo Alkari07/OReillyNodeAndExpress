@@ -7,6 +7,7 @@ var app = express();
 var fortune = require('./lib/fortune.js');
 var testContext = require('./lib/templatingExample.js');
 var dummyWeatherData = require('./lib/weatherDummy.js');
+var formidable = require('formidable');
 
 
 //setup handlebars view engine
@@ -114,8 +115,19 @@ app.get('/data/nursery-rhyme', function(req, res) {
 app.get('/newsletter', function(req, res) {
     res.render('newsletter', {csrf: 'CSRF token goes here'});
 });
+app.get('/newsletter2', function(req, res) {
+    res.render('newsletter2', {csrf: 'CSRF token goes here', layout: 'jqueryTest'});
+});
 app.get('/thank-you', function(req, res) {
     res.render('thankYou', {csrf: 'CSRF token goes here'});
+});
+
+//file uploads
+app.get('/contest/vacation-photo', function(req, res) {
+    var now = new Date();
+    res.render('contest/vacation-photo', {
+        year: now.getFullYear(), month: now.getMonth()
+    });
 });
 
 //Basic form processing (from POST)
@@ -137,8 +149,27 @@ app.post('/process', function(req, res) {
     console.log('CSRF token (from hidden form field): ' + req.body._csrf);
     console.log('Name:' + req.body.name);
     console.log('Email:' + req.body.email);
-    res.redirect(303, '/thank-you');
-})
+    if (req.xhr || req.accepts('json,html')==='json') {
+        res.send({
+            success: true
+        });
+    } else {
+        res.redirect(303, '/thank-you');
+    }
+    
+});
+
+app.post('/contest/vacation-photo/:year/:month', function(req, res) {
+    var form = new formidable.IncomingForm();
+    console.log('POST endpoint hit');
+    form.parse(req, function(err, fields, files) {
+        if (err) return res.redirect(303, '/error');
+        console.log('received fields: ', fields);
+        console.log('received files: ');
+        console.log(files);
+        res.redirect(303, '/thank-you')
+    });
+});
 
 /**
  * Basic APIs
