@@ -1,0 +1,4 @@
+- each middleware component is a piece in the pipe
+- you move to the next piece by calling the next() function
+- order matters
+- each part of the pipe takes a req, a res, a next function, and maybe an error

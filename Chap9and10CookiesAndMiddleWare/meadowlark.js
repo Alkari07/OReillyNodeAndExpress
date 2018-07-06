@@ -9,6 +9,7 @@ var testContext = require('./lib/templatingExample.js');
 var dummyWeatherData = require('./lib/weatherDummy.js');
 var formidable = require('formidable');
 var credentials = require('./credentials.js');
+var cartValidation = require('./lib/cartValidation.js');
 
 
 //setup handlebars view engine
@@ -65,6 +66,11 @@ app.use(function(req, res, next) {
     delete req.session.flash;
     next();
 });
+
+//shows how routing and middleware can be encapsulated
+//in this case, the validation pipe will run every time the user tries to navigate around the site
+app.use(cartValidation.checkWaivers);
+app.use(cartValidation.checkGuestCounts);
 /**
  * Routes
  * app.VERB ignores trailing slashes, things after ? for query strings, etc.  it just works
@@ -199,13 +205,13 @@ app.post('/newsletter', function(req, res) {
             return res.json({
                 error: 'Invalid name email address.'
             });
-            req.session.flash = {
-                type: 'danger',
-                intro: 'Validation error!',
-                message: 'the email address you entered was not valid.',
-            };
-            return res.redirect(303, '/newsletter/archive');
         }
+        req.session.flash = {
+            type: 'danger',
+            intro: 'Validation error!',
+            message: 'the email address you entered was not valid.',
+        };
+        return res.redirect(303, '/newsletter/archive');
     }
 
     //newletter signup is an example of an object you might create
