@@ -1,6 +1,7 @@
 var loadtest = require('loadtest');
 var expect = require('chai').expect;
 
+//simple load testing, respond to 50 requests in less than a second
 suite('Stress tests', function() {
     test('Homepage should handle 50 requests in a second', function(done) {
         var options = {
@@ -10,7 +11,7 @@ suite('Stress tests', function() {
         };
         loadtest.loadTest(options, function(err, result) {
             expect(!err);
-            expect(result.totalTimeSecond <5);
+            expect(result.totalTimeSecond <1);
             done();
         });
     });
