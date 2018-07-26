@@ -1,0 +1,29 @@
+<ul>
+    {{#each tours}}
+        {{!I'm in a new block... and the context has changed}}
+        <li>
+            {{name}} - {{price}}
+            {{#if ../currencies}}
+                ({{../../currency.abbrev}})
+            {{/if}}
+        </li>
+    {{/each}}
+    {{#unless currencies}}
+        <p>All prices in {{currency.name}}</p>
+    {{/unless}}
+    {{#if specialsUrl}}
+        {{!I'm in a new block but the context (sort of) hasn't changed.  We are now in a child, duplicate context}}
+        <p>Check out our <a href='{{specialsUrl}}'></a>specials!</p>
+    {{else}}
+        <p>Please check back often for specials</p>
+
+    {{/if}}
+    <p>
+        {{#each currencies}}
+            {{!The '.' in moustache braces displays the current context object}}
+            <a href='#' class='currency'>{{.}}</a>
+        {{else}}
+            Unfortunatealy, we currently only accept {{currency.name}}
+        {{/each}}
+    </p>
+</ul>
