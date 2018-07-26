@@ -11,7 +11,6 @@ var formidable = require('formidable');
 var credentials = require('./credentials.js');
 var cartValidation = require('./lib/cartValidation.js');
 
-
 //setup handlebars view engine
 var handlebars = require('express-handlebars').create({
     defaultLayout:'main',
@@ -27,6 +26,51 @@ app.set('view engine', 'handlebars');
 
 //if env.PORT exists, use that.  If not, use 3000
 app.set('port', process.env.PORT || 3000);
+
+//setup execution context to trap uncontrolled exceptions
+app.use(function (req, res, next) {
+    //create a domain for this request
+    var domain = require('domain').create();
+    //handle errors on this domain
+    domain.on('error', function(err) {
+        console.error('DOMAIN CAUGHT ERROR\n', err.stack);
+        try {
+            //failsafe shutodwn in 5 seconds
+            setTimeout(function() {
+                console.error('failsafe shutdown.');
+                process.exit(1);
+            }, 5000);
+
+            //disconnect from the cluster
+            var worker = require('cluster').worker;
+            if(worker) {
+                worker.disconnect();
+            }
+
+            //stop taking new requests
+            server.close();
+            try {
+                //attempt to use Express error route
+                next(err);
+            } catch(err) {
+                //if epress error route failed, try plain Node response
+                console.error('Express error mechanism failed.\n', err.stack);
+                res.statusCode=500;
+                res.setHeader('content-type', 'text/plain');
+                res.end('Server Error');
+            }
+        } catch(err) {
+            console.error('Unable to send 500 response.\n', err.stack);
+        }
+    });
+
+    //add the request and response objects to the domain
+    domain.add(req);
+    domain.add(res);
+
+    //execute the rest of the request chain in the domain
+    domain.run(next);
+});
 
 //set up cookie based session
 app.use(require('cookie-parser')(credentials.cookieSecret));
@@ -165,6 +209,20 @@ app.get('/contest/vacation-photo', function(req, res) {
     var now = new Date();
     res.render('contest/vacation-photo', {
         year: now.getFullYear(), month: now.getMonth()
+    });
+});
+
+app.get('/fail', function(req, res) {
+    throw new Error('Nope!');
+});
+
+app.get('/epicFail', function(req, res) {
+    //this will crash the server
+    process.nextTick(function() {
+        //this waits until the server is idle and no longer has a context to understand why the error occured
+        //(ie, the request has alredy been resolved)
+        //can be solved using a domain, which provides a context to do a graceful shutdown
+        throw new Error ('Kaboom!');
     });
 });
 
