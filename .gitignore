@@ -75,6 +75,9 @@ node_modules/
 jspm_packages/
 dojo_modules
 
+#local file storage
+data/
+
 # Typescript v1 declaration files
 typings/
 
