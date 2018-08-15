@@ -6,7 +6,8 @@ module.exports = {
                 socketOptions: {
                     keepAlive: 1
                 }
-            }
+            },
+            useNewUrlParser: true
         };
         switch(app.get('env')) {
             case 'development':
