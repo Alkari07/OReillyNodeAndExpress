@@ -11,6 +11,9 @@ var formidable = require('formidable');
 var credentials = require('./credentials.js');
 var cartValidation = require('./lib/cartValidation.js');
 var vacationPhotoHandling = require('./lib/vacationPhotoHandling.js');
+var dbSetup = require('./lib/dbSetup.js');
+var populateDb = require('./lib/populateDb');
+var Vacation = require('./models/vacation.js');
 
 
 //setup handlebars view engine
@@ -106,6 +109,12 @@ switch(app.get('env')) {
             path: __dirname + '/log/requrests.log'
         }));
 }
+
+/**
+ * setup db
+ */
+dbSetup.setup(app, credentials);
+populateDb.populate(Vacation);
 
  //This middleware injects the weather data into the res.locals.partials object
 
@@ -225,6 +234,23 @@ app.get('/epicFail', function(req, res) {
         //(ie, the request has alredy been resolved)
         //can be solved using a domain, which provides a context to do a graceful shutdown
         throw new Error ('Kaboom!');
+    });
+});
+
+app.get('/vacations', function(req, res) {
+    Vacation.find({available: true}, function(err, vacations) {
+        var context = {
+            vacations: vacations.map(function(vacation) {
+                return {
+                    sku: vacation.sku,
+                    name: vacation.name,
+                    description: vacation.description,
+                    price: vacation.getDisplayPrice(),
+                    inSeason: vacation.inSeason
+                }
+            })
+        };
+        res.render('vacations', context);
     });
 });
 
