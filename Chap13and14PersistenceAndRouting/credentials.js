@@ -1,5 +1,6 @@
 module.exports= {
     //some random string
+    //TODO: I am currently having problems proving out the connection, and I suspect the problem is the esri firewall.
     cookieSecret: 'growing milk doctor camp',
     mongo: {
         development: {

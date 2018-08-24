@@ -14,6 +14,21 @@ var vacationPhotoHandling = require('./lib/vacationPhotoHandling.js');
 var dbSetup = require('./lib/dbSetup.js');
 var populateDb = require('./lib/populateDb');
 var Vacation = require('./models/vacation.js');
+var vacationInSeasonInit = require('./lib/init/vacationInSeasonInit');
+var MongoSessionStore = require('sesion-mongoose')(require('connect'));
+
+
+//setup the session store in mongoose
+var sessionStore = new MongoSessionStore({
+    url: credentials.mongo[app.get('env')].connectionString
+});
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(require('express-session')({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret,
+    store: sessionStore
+}));
 
 
 //setup handlebars view engine
@@ -237,22 +252,7 @@ app.get('/epicFail', function(req, res) {
     });
 });
 
-app.get('/vacations', function(req, res) {
-    Vacation.find({available: true}, function(err, vacations) {
-        var context = {
-            vacations: vacations.map(function(vacation) {
-                return {
-                    sku: vacation.sku,
-                    name: vacation.name,
-                    description: vacation.description,
-                    price: vacation.getDisplayPrice(),
-                    inSeason: vacation.inSeason
-                }
-            })
-        };
-        res.render('vacations', context);
-    });
-});
+vacationInSeasonInit.setup(app);
 
 //Basic form processing (from POST)
 //body-parser middleware must be linked in
