@@ -1,6 +1,7 @@
 module.exports = {
     setup: function(app) {
-        var VacationInSeasonListener = require('./models/vacationInSeasonListener.js');
+        var VacationInSeasonListener = require('../../models/vacationInSeasonListener.js');
+        var Vacation = require('../../models/vacation.js');
 
         app.get('/notify-me-when-in-season', function(req, res) {
             res.render('notify-me-when-in-season', {sku: req.query.sku});

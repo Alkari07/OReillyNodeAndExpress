@@ -15,20 +15,20 @@ var dbSetup = require('./lib/dbSetup.js');
 var populateDb = require('./lib/populateDb');
 var Vacation = require('./models/vacation.js');
 var vacationInSeasonInit = require('./lib/init/vacationInSeasonInit');
-var MongoSessionStore = require('sesion-mongoose')(require('connect'));
+//var MongoSessionStore = require('session-mongoose')(require('connect'));
 
 
 //setup the session store in mongoose
-var sessionStore = new MongoSessionStore({
-    url: credentials.mongo[app.get('env')].connectionString
-});
-app.use(require('cookie-parser')(credentials.cookieSecret));
-app.use(require('express-session')({
-    resave: false,
-    saveUninitialized: false,
-    secret: credentials.cookieSecret,
-    store: sessionStore
-}));
+// var sessionStore = new MongoSessionStore({
+//     url: credentials.mongo[app.get('env')].connectionString
+// });
+// app.use(require('cookie-parser')(credentials.cookieSecret));
+// app.use(require('express-session')({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: credentials.cookieSecret,
+//     store: sessionStore
+// }));
 
 
 //setup handlebars view engine
