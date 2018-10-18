@@ -39,6 +39,10 @@ var handlebars = require('express-handlebars').create({
             if (!this._sections) this._sections={};
             this._sections[name] = options.fn(this);
             return null;
+        },
+        //allows you to setup a CDN path in a single place
+        static: function(name) {
+            return require('./lib/static.js').map(name);
         }
     }});
 app.engine('handlebars', handlebars.engine);
