@@ -1,0 +1,4 @@
+Model: a pure logical representation of data
+View: What is presented to the user
+Controller: Accepts user inputs, manipulates instantiation of the modle and updates the View
+

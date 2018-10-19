@@ -1,0 +1,3 @@
+The idea between using a CDN mapper is that your CDN path may change often, but you only want to change this variable (specifying the root path)
+in one place, then have all path variables (ie, src="CDN+relativ/path/to/file) update throughout the app when handlebars compiles the code
+
