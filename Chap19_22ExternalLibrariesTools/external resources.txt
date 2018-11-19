@@ -1,0 +1,3 @@
+javascriptweekly.com
+nodeweekly.com
+html5weekly.com
